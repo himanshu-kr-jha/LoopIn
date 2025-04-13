@@ -5,6 +5,7 @@ const SocietySchema = new Schema({
   logo: { type: String },
   name: { type: String, required: true },
   description: { type: String, required: true },
+  societyEmail: {type:String,required :true ,unique: true},
   //   mainAdmin: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the main admin
   societyAdmin: [
     {

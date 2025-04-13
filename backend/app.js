@@ -1,18 +1,23 @@
 if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
-
+const port = 5000;
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const authRouter = require("./routes/auth/auth.route.js");
-const userRouter =require("./routes/user/user.route");
-const port = 5000;
 const { http } = require("http-status");
 const methodOverride = require("method-override");
 const passport = require("passport");
+const userRouter =require("./routes/user/user.route");
+const authRouter = require("./routes/auth/auth.route.js");
+const societyAdminRouter = require("./routes/society/society.admin.routes.js");
+const societyUserRouter = require("./routes/society/society.user.routes.js");
+const eventAdminRouter = require("./routes/event/event.admin.routes.js");
+const eventUserRouter = require("./routes/event/event.user.routes.js");
+const recruitmentAdminRouter = require("./routes/recruitment/recruitment.admin.routes");
+const recruitmentUserRouter = require("./routes/recruitment/recruitment.user.routes.js");
 const {
   ReasonPhrases,
   StatusCodes,
@@ -21,8 +26,8 @@ const {
 } = require("http-status-codes");
 //mongodb connection
 const connectDB = require("./config/db");
-
 require("./config/passport"); // Passport configuration file
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -33,7 +38,9 @@ app.use(
     credentials: true, // allow credentials (cookies)
   })
 );
+
 connectDB();
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -52,38 +59,23 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use("/auth", authRouter);
-
-// app.get("/user", async (req, res) => {
-//   if (!req.isAuthenticated()) {
-//     return res.status(StatusCodes.UNAUTHORIZED).json({
-//       message: "User not logged in or session expired",
-//     });
-//   }
-
-//   const { _id } = req.user; // Passport attaches user object to req.user
-//   const user = await User.findById(_id).lean();
-
-//   if (!user) {
-//     return res.status(StatusCodes.NOT_FOUND).json({
-//       message: "User not found",
-//     });
-//   }
-
-//   res.status(StatusCodes.OK).json({
-//     data: user,
-//   });
-// });
 app.use("/user",userRouter);
-
-
-
+app.use("/user/recruitment",recruitmentUserRouter);
+app.use("/society",societyUserRouter);
+app.use("/society/admin",societyAdminRouter);
+app.use("/event",eventUserRouter);
+app.use("/event/admin",eventAdminRouter);
+app.use("/society/recruitment",recruitmentAdminRouter);
 app.get("/", (req, res) => {
   return (
     res
       .status(StatusCodes.OK)
       // .send(ReasonPhrases)
-      .json({ message: "this is root page", author: "himanshu kumar jha"})
+      .json({ message: "this is root page", author: "himanshu kumar jha",
+        session:req.session,
+      })
   );
 });
 

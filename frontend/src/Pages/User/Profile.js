@@ -7,12 +7,12 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:5000/user/profile", {
-        withCredentials: true, // <-- This is required to send cookies
+        withCredentials: true,
       });
-      setData(response.data); // response.data = { data: { name, email, ... } }
+      setData(response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
-      setData({ error:"Failed" });
+      setData({ error: "Failed to load profile" });
     }
   };
 
@@ -20,44 +20,92 @@ const Profile = () => {
     fetchData();
   }, []);
 
-  if (!data) return <div>Loading...</div>;
-  if (data.error) return <div>{data.error}</div>;
+  if (!data) return <div className="text-center mt-10">Loading...</div>;
+  if (data.error)
+    return <div className="text-center text-red-600 mt-10">{data.error}</div>;
 
-  const user = data.data;
+  const { data: user, profile } = data;
 
   return (
-    <div
-      style={{
-        maxWidth: "400px",
-        margin: "1rem",
-        padding: "1rem",
-        border: "1px solid red",
-        borderRadius: "8px",
-        
-      }}
-    >
-      <img
-        src={user.profileimage}
-        alt="Profile"
-        style={{
-          width: "100px",
-          borderRadius: "50%",
-          display: "block",
-          margin: "auto",
-          border:"solid",
-          borderColor:"black"
-        }}
-      />
-      <h2 style={{ textAlign: "center" }}>{user.name}</h2>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Role:</strong> {user.role}
-      </p>
-      <p>
-        <strong>Created:</strong> {new Date(user.createdAt).toLocaleString()}
-      </p>
+    <div className="max-w-xl mx-auto p-6 mt-10 bg-white rounded-xl shadow-lg">
+      <div className="flex flex-col items-center mb-6">
+        <img
+          src={user.profileimage}
+          alt="Profile"
+          className="w-28 h-28 object-cover rounded-full border-4 border-gray-300"
+        />
+        <h2 className="text-2xl font-semibold mt-4">{user.name}</h2>
+        <p className="text-gray-500">{user.role}</p>
+        <p className="text-sm text-gray-400 mt-1">
+          Joined on {new Date(user.createdAt).toLocaleDateString()}
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-lg font-semibold mb-1">Contact Info</h3>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          {profile?.contact && (
+            <p>
+              <strong>Contact:</strong> {profile.contact}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-1">Academic Details</h3>
+          <p>
+            <strong>Department:</strong> {profile?.department || "N/A"}
+          </p>
+          <p>
+            <strong>Year:</strong> {profile?.year || "N/A"}
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-1">Links</h3>
+          <ul className="space-y-2">
+            {profile?.resumeUrl && (
+              <li>
+                <a
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Resume
+                </a>
+              </li>
+            )}
+            {profile?.linkedinUrl && (
+              <li>
+                <a
+                  href={profile.linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  LinkedIn Profile
+                </a>
+              </li>
+            )}
+            {profile?.portfolioUrl && (
+              <li>
+                <a
+                  href={profile.portfolioUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Portfolio
+                </a>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

@@ -93,7 +93,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <a
                   className="btn btn-outline-info btn-sm"
-                  href="http://localhost:5000/auth/google"
+                  href="/"
                 >
                   Login
                 </a>

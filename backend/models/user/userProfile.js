@@ -3,7 +3,7 @@ const { Schema, model } = mongoose;
 
 const UserProfileSchema = new Schema(
   {
-
+    userid:{ type: Schema.Types.ObjectId, ref: "User" },
     contact: { type: String, default: null},
     department: { type: String, default: null },
     year: { type: String, default: null },

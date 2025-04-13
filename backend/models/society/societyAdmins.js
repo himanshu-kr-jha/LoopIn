@@ -12,6 +12,7 @@ const SocietyAdminSchema = new Schema({
     ref: "Society",
     required: true,
   },
+  password: { type: String, required: true }, // Not required for Google users
 });
 
 const SocietyAdmin = model("SocietyAdmin", SocietyAdminSchema);
