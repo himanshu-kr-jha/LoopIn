@@ -1,6 +1,6 @@
 const Recruitment = require("../../models/society/recruitment");
 const Society = require("../../models/society/society");
-
+const {StatusCodes}= require("http-status-codes");
 module.exports.postRecruitment = async (req, res) => {
   try {
     const {

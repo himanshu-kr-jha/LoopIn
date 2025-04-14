@@ -34,7 +34,7 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(
   cors({
-    origin: "http://localhost:3000", // your React app's origin
+    origin: "http://localhost:5173", // your React app's origin
     credentials: true, // allow credentials (cookies)
   })
 );

@@ -5,6 +5,7 @@ const router = express.Router();
 const User = require("../../models/user/user.js");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const { StatusCodes } = require("http-status-codes");
 
 router.use(
   session({
@@ -49,7 +50,10 @@ router.get(
     // console.log("access toeknt -----------============-----------",req);
     // req.session.accessToken = req.user.googleAccessToken;
     req.session.user=req.user;
-    res.redirect("http://localhost:3000/profile"); // Redirect to user dashboard
+    res.redirect(
+      `http://localhost:5173/auth-success?token=${req.user.token}`
+    );
+    
   }
 );
 
