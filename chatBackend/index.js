@@ -8,10 +8,11 @@ import User from "./models/user.js";
 import isLogin from "./middleware/isLogin.js";
 import messageRouter from "./routes/message.route.js"
 import userRouter from "./routes/user.route.js"
-const app = express();
+import { app, server } from "./Socket/socket.js";
+// index.js
+
 app.use(express.json());
 app.use(cookieParser());
-
 // Enable CORS with credentials
 app.use(
   cors({
@@ -28,6 +29,7 @@ app.use("/api/message",isLogin,messageRouter);
 app.use("/api/user",isLogin,userRouter);
 app.post("/api/store-token", (req, res) => {
   const { token } = req.body;
+  console.log("Token received", token);
   if (!token) return res.status(400).json({ message: "Token is required" });
 
   // Save token in httpOnly cookie
@@ -37,6 +39,7 @@ app.post("/api/store-token", (req, res) => {
     sameSite: "Lax", // or 'Strict'/'None' based on your use
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
+  console.log("cokkieesss------",res.cookie.token);
   console.log("Token stored successfully",`${token}`);
   return res.json({ message: "Token stored in cookie successfully" });
 });
@@ -46,6 +49,7 @@ app.get("/",isLogin,(req,res)=>{
         data:req.user
     })
 })
-app.listen(port,()=>{
+
+server.listen(port,()=>{
     console.log(`Connected to server at port: ${port}`);
 })

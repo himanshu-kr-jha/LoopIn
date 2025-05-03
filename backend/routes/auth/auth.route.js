@@ -50,6 +50,12 @@ router.get(
     // console.log("access toeknt -----------============-----------",req);
     // req.session.accessToken = req.user.googleAccessToken;
     req.session.user=req.user;
+    // Generate JWT token
+    const token = jwt.sign(
+      { user: req.user, isGuest: false },
+      process.env.JWT_TOKEN,
+      { expiresIn: "1h" }
+    );
     res.redirect(
       `http://localhost:5173/auth-success?token=${req.user.token}`
     );

@@ -8,7 +8,7 @@ const AuthSuccess = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     console.log("Token from URL:", token);
-
+    localStorage.setItem("chatapp_token", JSON.stringify(token));
     const sendTokenToChatBackend = async (token) => {
       try {
         const response = await fetch("http://localhost:5001/api/store-token", {

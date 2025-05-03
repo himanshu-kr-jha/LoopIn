@@ -29,7 +29,7 @@ module.exports.getsociety = async (req, res) => {
   try {
     // Fetch all societies
     const societyid=req.params.id;
-    const society = await Society.findById(societyid);
+    const society = await Society.findById(societyid).populate("followers");
 
     // Check if no societies are found
 

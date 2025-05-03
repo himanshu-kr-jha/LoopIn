@@ -52,12 +52,18 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-6">
-          <a
-            href="http://localhost:5000/society"
+          <Link
+            to="/society/all"
             className="text-white hover:text-cyan-400 transition"
           >
             Society
-          </a>
+          </Link>
+          <Link
+            to="/chat/home"
+            className="text-white hover:text-cyan-400 transition"
+          >
+            Chat
+          </Link>
 
           {isLoggedIn ? (
             <>
